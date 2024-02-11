@@ -6,15 +6,16 @@
 
 ---
 
-For compilation just have Visual Studio 2022 Installed. With the project open, make a restore of the packages restore
-nucket packages.
+* Visual Studio 2022 Installed.
+* MySql
+
 
 ### Informations
 
 ---
 
 The connection are in the appsettings.json files (appsettings.Development.json, appsettings.Staging.json,
-appsettings.Production.json).
+appsettings.Production.json). Configure it with your data string connection and credentials.
 
 #### Methods available. 
 Follows SWAGGER of API where are the methods with description: - https://localhost:["port"]/swagger/index.html
@@ -24,6 +25,9 @@ Change the port above with port configured in lauchSettings.json.
 ### Starting
 
 ---
+
+With the project open, make a restore of the packages restore
+nucket packages.
 
 Start the respective backend.[domainName].api project using Visual Studio.
 
