@@ -1,13 +1,14 @@
 ﻿using backend.person.datalibrary.DataContext;
 using backend.person.datalibrary.Repository;
 using backend.person.datalibrary.Repository.Interfaces;
-using backend.person.modellibrary.DataModel;
+using backend.person.test.Mocks.PersonMocks;
 using FluentAssertions;
 
 namespace backend.person.test.RepositoryTest;
 
 public class PersonRepositoryTest
 {
+    private readonly PersonMocks _personMocks = new();
     private readonly IPersonRepository _personRepository;
 
     public PersonRepositoryTest()
@@ -15,12 +16,7 @@ public class PersonRepositoryTest
         IPersonDataContext context = new TestDataContext();
         _personRepository = new PersonRepository(context);
 
-        context.Person.Add(new Person
-        {
-            FirstName = "João",
-            LastName = "Silva",
-            Age = 32
-        });
+        context.Person.Add(_personMocks.Person);
         context.SaveChanges();
     }
 
@@ -28,20 +24,12 @@ public class PersonRepositoryTest
     private void PersistTest()
     {
         //Arrange
-        var person = new Person
-        {
-            Id = 0,
-            FirstName = "João",
-            LastName = "Mendes",
-            Age = 31
-        };
 
         //Act
-        var result = _personRepository.Persist(person);
-        
+        var result = _personRepository.Persist(_personMocks.Person);
+
         //Assert
         result.Should().NotBeNull();
         result.Id.Should().BeGreaterThan(0);
     }
-
 }
