@@ -1,6 +1,5 @@
 ﻿using backend.person.api.Services.Interfaces;
 using backend.person.datalibrary.Dto;
-using backend.person.modellibrary.DataModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.person.api.Controller;
@@ -17,7 +16,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost("Persist")]
-    public async Task<IActionResult> Persist([FromBody] CreatePersonDto person)
+    public async Task<IActionResult> PersistAsync([FromBody] CreatePersonDto person)
     {
         try
         {
