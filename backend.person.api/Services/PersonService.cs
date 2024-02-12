@@ -17,7 +17,7 @@ public class PersonService : IPersonService
         _mapper = mapper;
     }
 
-    public async Task<Person> Persist(CreatePersonDto personDto)
+    public async Task<Person> PersistAsync(CreatePersonDto personDto)
     {
         var person = _mapper.Map<Person>(personDto);
         return await _personRepository.Persist(person);

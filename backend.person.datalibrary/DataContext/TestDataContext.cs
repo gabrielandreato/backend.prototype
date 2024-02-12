@@ -1,15 +1,22 @@
 ﻿using backend.person.modellibrary.DataModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.person.datalibrary.DataContext;
 
-public class PersonDataContext : DbContext, IPersonDataContext
+public class TestDataContext: DbContext, IPersonDataContext
 {
     public DbSet<Person> Person { get; set; } = null!;
-    public PersonDataContext(DbContextOptions options) : base(options)
-    {
 
+    private readonly string? _v = null;
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseInMemoryDatabase(string.IsNullOrEmpty(_v) ? "dbTestes" : _v);
+        optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+        optionsBuilder.EnableSensitiveDataLogging();
+        base.OnConfiguring(optionsBuilder);
     }
 
     public IDbContextTransaction? CurrentTransaction()
@@ -43,11 +50,10 @@ public class PersonDataContext : DbContext, IPersonDataContext
 
     public void Migrate()
     {
-        Database.Migrate();
     }
 
     public void LockTable(string tableName)
     {
-        Database.ExecuteSql($"SELECT TOP 1 1 FROM {tableName} WITH (TABLOCKX, HOLDLOCK)");
     }
+    
 }

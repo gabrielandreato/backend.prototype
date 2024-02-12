@@ -5,5 +5,5 @@ namespace backend.person.api.Services.Interfaces;
 
 public interface IPersonService
 {
-    Task<Person> Persist(CreatePersonDto personDto);
+    Task<Person> PersistAsync(CreatePersonDto personDto);
 }

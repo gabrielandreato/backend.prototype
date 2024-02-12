@@ -21,7 +21,7 @@ public class PersonController : ControllerBase
     {
         try
         {
-            var result = await _personService.Persist(person);
+            var result = await _personService.PersistAsync(person);
             return Ok(result);
         } catch (Exception e)
         {
