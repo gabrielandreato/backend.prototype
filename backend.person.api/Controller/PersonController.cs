@@ -27,4 +27,17 @@ public class PersonController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetList([FromQuery] string? ids, string? firstName, string? lastName, int? page,
+        int? pageSize)
+    {
+        try
+        {
+            return Ok();
+        } catch (Exception e)
+        {
+            return BadRequest();
+        }
+    }
 }

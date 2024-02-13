@@ -4,5 +4,7 @@ namespace backend.person.datalibrary.Repository.Interfaces;
 
 public interface IPersonRepository
 {
-    Task<Person> Persist(Person person);
+    Person Persist(Person person);
+    Person Delete(int id);
+    Person GetByPk(int id);
 }
