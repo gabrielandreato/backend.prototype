@@ -16,13 +16,13 @@ public class PersonControllerTest
     }
 
     [Fact]
-    private async void PersistSuccessTest()
+    private void PersistSuccessTest()
     {
         //Arrange
         _personMocks.BuildMockPersonPersistSuccess();
 
         //Act
-        var response = await _personController.PersistAsync(_personMocks.CreatePersonDto);
+        var response = _personController.Persist(_personMocks.CreatePersonDto);
         var okResult = response as OkObjectResult;
 
         //Assert
@@ -30,13 +30,13 @@ public class PersonControllerTest
     }
 
     [Fact]
-    private async void PersistExceptionTest()
+    private void PersistExceptionTest()
     {
         //Arrange
         _personMocks.BuildMockPersonPersistException();
 
         //Act
-        var response = await _personController.PersistAsync(_personMocks.CreatePersonDto);
+        var response = _personController.Persist(_personMocks.CreatePersonDto);
         var okObjectResponse = response as OkObjectResult;
 
         //Assert

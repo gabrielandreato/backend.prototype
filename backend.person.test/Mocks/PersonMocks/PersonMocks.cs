@@ -32,18 +32,18 @@ public class PersonMocks
                 p.FirstName == CreatePersonDto.FirstName
                 && p.LastName == CreatePersonDto.LastName)
             )
-        ).ReturnsAsync(() =>
+        ).Returns(() =>
         {
             Person.Id = 32;
             return Person;
         });
 
         PersonServiceMock.Setup(x =>
-            x.PersistAsync(It.Is<CreatePersonDto>(p =>
+            x.Persist(It.Is<CreatePersonDto>(p =>
                 p.FirstName == CreatePersonDto.FirstName
                 && p.LastName == CreatePersonDto.LastName)
             )
-        ).ReturnsAsync(Person);
+        ).Returns(Person);
     }
     public void BuildMockPersonPersistException()
     {
@@ -52,13 +52,13 @@ public class PersonMocks
                 p.FirstName == CreatePersonDto.FirstName
                 && p.LastName == CreatePersonDto.LastName)
             )
-        ).ThrowsAsync(new Exception(SimulatedException));
+        ).Throws(new Exception(SimulatedException));
 
         PersonServiceMock.Setup(x =>
-            x.PersistAsync(It.Is<CreatePersonDto>(p =>
+            x.Persist(It.Is<CreatePersonDto>(p =>
                 p.FirstName == CreatePersonDto.FirstName
                 && p.LastName == CreatePersonDto.LastName)
             )
-        ).ThrowsAsync(new Exception(SimulatedException));
+        ).Throws(new Exception(SimulatedException));
     }
 }

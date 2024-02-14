@@ -21,12 +21,12 @@ public class PersonServiceTest
     }
 
     [Fact]
-    private async void PersistAsyncTest()
+    private void PersistAsyncTest()
     {
         //Arrange
 
         //Act
-        var result = await _personService.PersistAsync(_personMocks.CreatePersonDto);
+        var result = _personService.Persist(_personMocks.CreatePersonDto);
 
         //Assert
         result.Should().NotBeNull();

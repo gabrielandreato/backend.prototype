@@ -33,13 +33,23 @@ public class PersonRepository : IPersonRepository
         return person;
     }
 
-    public List<Person> GetList(List<int> ids, string firstName, string lastName, int startAge, int endAge)
+    public PagedList<Person> GetList(int[]? ids = null, string? firstName = null, string? lastName = null,
+        int startAge = 0, int endAge = 0, int page = 0, int pageSize = 0)
     {
-        var response = new PagedList<Person>();
-         
+        var query =
+            from person in _context.Person
+            where
+                (ids.Length == 0 || ids.Contains(person.Id))
+                && (firstName == null || firstName == person.FirstName)
+                && (lastName == null || firstName == person.LastName)
+                && (startAge == 0 || person.Age > startAge)
+                && (endAge == 0 || person.Age < endAge)
+            select person;
+        
+        return PagedList<Person>.Create(query, page, pageSize);
     }
 
-    public Person Delete(int id)
+    public Person Remove(int id)
     {
         var person = GetByPk(id);
         _context.Person.Remove(person);
@@ -56,6 +66,5 @@ public class PersonRepository : IPersonRepository
         {
             throw new ApplicationException("Id cannot be found", e);
         }
-        
     }
 }
