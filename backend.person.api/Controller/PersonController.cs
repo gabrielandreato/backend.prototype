@@ -40,8 +40,7 @@ public class PersonController : ControllerBase
     {
         try
         {
-            var result = _personService.Persist(person);
-            return Ok(result);
+            return Ok(_personService.Persist(person));
         } catch (Exception e)
         {
             return BadRequest(e.Message);
@@ -61,9 +60,8 @@ public class PersonController : ControllerBase
     [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(List<Person>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpGet("List")]
-    public IActionResult GetList([FromQuery] string? ids, string? firstName, string? lastName, int startAge = 0,
-        int endAge = 0,
-        int page = 0, int pageSize = 0)
+    public IActionResult GetList([FromQuery] string? ids = null, string? firstName = null, string? lastName = null, int startAge = 0,
+        int endAge = 0, int page = 0, int pageSize = 0)
     {
         try
         {
@@ -85,7 +83,8 @@ public class PersonController : ControllerBase
     {
         try
         {
-            return Ok(_personService.GetByPk(id));
+            var byPk = _personService.GetByPk(id);
+            return Ok(byPk);
         } catch (Exception e)
         {
             return BadRequest(e.Message);

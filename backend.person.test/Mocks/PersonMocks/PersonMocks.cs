@@ -67,21 +67,26 @@ public class PersonMocks
     {
         PersonRepositoryMock.Setup(s => s.Remove(It.Is<int>(id => id == Person.Id))
         ).Returns(Person);
+        PersonServiceMock.Setup(s => s.Remove(It.Is<int>(id => id == Person.Id))
+        ).Returns(Person);
     }
 
     public void CreateGetByPkTestMocks()
     {
         PersonRepositoryMock.Setup(s => s.GetByPk(It.Is<int>(id => id == Person.Id))
         ).Returns(Person);
+        
+        PersonServiceMock.Setup(s => s.GetByPk(It.Is<int>(id => id == Person.Id))
+        ).Returns(Person);
     }
 
     public void CreateGetListMock()
     {
         var list = new List<Person>() { Person };
-        var query = (from person in list
-            where person.Id == Person.Id
-            select person);
-        
+        var pagedList = new PagedList<Person>
+        {
+            Items = new List<Person>() { Person },
+        };
         PersonRepositoryMock.Setup(s => s.GetList(
                 It.IsAny<int[]?>(),
                 It.Is<string>(id => id == Person.FirstName),
@@ -91,10 +96,17 @@ public class PersonMocks
                 It.Is<int>(id => id == 1),
                 It.Is<int>(id => id == 10)
             )
-        ).Returns(new PagedList<Person>
-        {
-            Items = new List<Person>() { Person },
-            
-        });
+        ).Returns(pagedList);
+        
+        PersonServiceMock.Setup(s => s.GetList(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<int>()
+            )
+        ).Returns(pagedList);
     }
 }
