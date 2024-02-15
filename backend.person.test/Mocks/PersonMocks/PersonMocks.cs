@@ -15,8 +15,8 @@ public class PersonMocks
 
     public PersonMocks()
     {
-        const string firstName = "João";
-        const string lastName = "Silva";
+        const string firstName = "Matheus";
+        const string lastName = "Marques";
         const int age = 22;
         Person = new Person { FirstName = firstName, LastName = lastName, Age = age };
         CreatePersonDto = new CreatePersonDto { FirstName = firstName, LastName = lastName, Age = age };
