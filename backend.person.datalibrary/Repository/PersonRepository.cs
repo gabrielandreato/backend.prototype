@@ -39,11 +39,11 @@ public class PersonRepository : IPersonRepository
         var query =
             from person in _context.Person
             where
-                (ids.Length == 0 || ids.Contains(person.Id))
+                ((ids == null || ids.Length == 0) || ids.Contains(person.Id))
                 && (firstName == null || firstName == person.FirstName)
-                && (lastName == null || firstName == person.LastName)
-                && (startAge == 0 || person.Age > startAge)
-                && (endAge == 0 || person.Age < endAge)
+                && (lastName == null || lastName == person.LastName)
+                && (startAge == 0 || person.Age >= startAge)
+                && (endAge == 0 || person.Age <= endAge)
             select person;
         
         return PagedList<Person>.Create(query, page, pageSize);

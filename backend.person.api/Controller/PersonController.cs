@@ -1,6 +1,8 @@
 ﻿using backend.person.api.Services.Interfaces;
 using backend.person.datalibrary.Dto;
+using backend.person.modellibrary.DataModel;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.person.api.Controller;
 
@@ -20,6 +22,19 @@ public class PersonController : ControllerBase
     /// </summary>
     /// <param name="person">Person to be Persisted</param>
     /// <returns>Persisted person</returns>
+    /// /// /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /Person/Persist
+    ///     {
+    ///        "firstName": "Gabriel",
+    ///        "lastName": "Andreato",
+    ///        "age": 27
+    ///     }
+    ///
+    /// </remarks>
+    [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpPost("Persist")]
     public IActionResult Persist([FromBody] CreatePersonDto person)
     {
@@ -43,7 +58,8 @@ public class PersonController : ControllerBase
     /// <param name="endAge">The last age in the range</param>
     /// <param name="page">The page to retrieve</param>
     /// <param name="pageSize">The number of objects to return</param>
-    /// <returns>A list of Person</returns>
+    [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(List<Person>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpGet("List")]
     public IActionResult GetList([FromQuery] string? ids, string? firstName, string? lastName, int startAge = 0,
         int endAge = 0,
@@ -62,7 +78,8 @@ public class PersonController : ControllerBase
     /// Get a person based in the unique identifier.
     /// </summary>
     /// <param name="id">Unique identifier.</param>
-    /// <returns>A person</returns>
+    [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpGet("{id}")]
     public IActionResult GetByPk([FromRoute]int id)
     {
@@ -75,11 +92,10 @@ public class PersonController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Remove a person.
-    /// </summary>
-    /// <param name="id">Unique identifier</param>
-    /// <returns>Removed person.</returns>
+    
+    [SwaggerOperation("Remove a person.")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpDelete("{id}")]
     public IActionResult Remove([FromRoute] int id)
     {
