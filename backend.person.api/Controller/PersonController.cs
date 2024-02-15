@@ -92,7 +92,11 @@ public class PersonController : ControllerBase
     }
 
     
-    [SwaggerOperation("Remove a person.")]
+    
+    /// <summary>
+    /// Remove a person based in the unique identifier.
+    /// </summary>
+    /// <param name="id">Unique identifier.</param>
     [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpDelete("{id}")]
