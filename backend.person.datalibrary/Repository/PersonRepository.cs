@@ -39,7 +39,7 @@ public class PersonRepository : IPersonRepository
         var query =
             from person in _context.Person
             where
-                ((ids == null || ids.Length == 0) || ids.Contains(person.Id))
+                (ids == null || ids.Length == 0 || ids.Contains(person.Id))
                 && (firstName == null || firstName == person.FirstName)
                 && (lastName == null || lastName == person.LastName)
                 && (startAge == 0 || person.Age >= startAge)

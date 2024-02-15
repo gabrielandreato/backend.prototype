@@ -11,7 +11,7 @@ public class PersonRepositoryTest
 {
     private readonly PersonMocks _personMocks = new();
     private readonly IPersonRepository _personRepository;
-    private IPersonDataContext _context;
+    private readonly IPersonDataContext _context;
 
     public PersonRepositoryTest()
     {
@@ -28,10 +28,10 @@ public class PersonRepositoryTest
         //Arrange
 
         //Act
-        var result = _personRepository.Persist(new Person()
+        var result = _personRepository.Persist(new Person
         {
             FirstName = "João",
-            LastName = "Silva", 
+            LastName = "Silva",
             Age = 23
         });
 
@@ -39,7 +39,7 @@ public class PersonRepositoryTest
         result.Should().NotBeNull();
         result.Id.Should().BeGreaterThan(0);
     }
-    
+
     [Fact]
     private void PersistUpdateTest()
     {
@@ -55,38 +55,60 @@ public class PersonRepositoryTest
         result.Should().NotBeNull();
         result.Id.Should().BeGreaterThan(0);
     }
-    
+
     [Fact]
     private void GetListTest()
     {
         //Arrange
         var person = _personMocks.Person;
-        
+
         //Act
         var result = _personRepository.GetList([person.Id], person.FirstName, person.LastName, person.Age, person.Age,
             1, 10);
 
         //Assert
         result.Items.Should().NotBeEmpty();
+        result.Items.Select(x => x.Id).Should().Contain(person.Id);
     }
-    
+
     [Fact]
-    private void RemoveListTest()
+    private void RemoveExistentTest()
     {
         //Arrange
-        
+
+
         //Act
         var result = _personRepository.Remove(_personMocks.Person.Id);
 
         //Assert
-        result.Should().NotBeNull();
+        result.Id.Should().Be(_personMocks.Person.Id);
     }
-    
+
+    [Fact]
+    private void RemoveInexistentTest()
+    {
+        //Arrange
+
+        //Act
+        var result = "";
+        try
+        {
+
+            _personRepository.Remove(1000);
+        } catch (Exception e)
+        {
+            result = e.Message;
+        }
+
+        //Assert
+        result.Should().Be("Id cannot be found");
+    }
+
     [Fact]
     private void GetByPkTest()
     {
         //Arrange
-        
+
         //Act
         var result = _personRepository.GetByPk(_personMocks.Person.Id);
 

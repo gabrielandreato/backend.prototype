@@ -2,16 +2,16 @@
 using backend.person.datalibrary.Dto;
 using backend.person.datalibrary.Repository.Interfaces;
 using backend.person.modellibrary.DataModel;
+using backend.person.modellibrary.Utils;
 using Moq;
-using Xunit.Sdk;
 
 namespace backend.person.test.Mocks.PersonMocks;
 
 public class PersonMocks
 {
+    public const string? SimulatedException = "Simulated exception";
     public readonly Mock<IPersonRepository> PersonRepositoryMock = new();
     public readonly Mock<IPersonService> PersonServiceMock = new();
-    public const string? SimulatedException = "Simulated exception";
 
     public PersonMocks()
     {
@@ -25,7 +25,7 @@ public class PersonMocks
     public CreatePersonDto CreatePersonDto { get; set; }
     public Person Person { get; set; }
 
-    public void BuildMockPersonPersistSuccess()
+    public void CreatePersonPersistSuccessMock()
     {
         PersonRepositoryMock.Setup(x =>
             x.Persist(It.Is<Person>(p =>
@@ -45,7 +45,8 @@ public class PersonMocks
             )
         ).Returns(Person);
     }
-    public void BuildMockPersonPersistException()
+
+    public void CreatePersonPersistExceptionMock()
     {
         PersonRepositoryMock.Setup(x =>
             x.Persist(It.Is<Person>(p =>
@@ -60,5 +61,40 @@ public class PersonMocks
                 && p.LastName == CreatePersonDto.LastName)
             )
         ).Throws(new Exception(SimulatedException));
+    }
+
+    public void CreateRemoveTestMocks()
+    {
+        PersonRepositoryMock.Setup(s => s.Remove(It.Is<int>(id => id == Person.Id))
+        ).Returns(Person);
+    }
+
+    public void CreateGetByPkTestMocks()
+    {
+        PersonRepositoryMock.Setup(s => s.GetByPk(It.Is<int>(id => id == Person.Id))
+        ).Returns(Person);
+    }
+
+    public void CreateGetListMock()
+    {
+        var list = new List<Person>() { Person };
+        var query = (from person in list
+            where person.Id == Person.Id
+            select person);
+        
+        PersonRepositoryMock.Setup(s => s.GetList(
+                It.IsAny<int[]?>(),
+                It.Is<string>(id => id == Person.FirstName),
+                It.Is<string>(id => id == Person.LastName),
+                It.Is<int>(id => id == Person.Age),
+                It.Is<int>(id => id == Person.Age),
+                It.Is<int>(id => id == 1),
+                It.Is<int>(id => id == 10)
+            )
+        ).Returns(new PagedList<Person>
+        {
+            Items = new List<Person>() { Person },
+            
+        });
     }
 }

@@ -2,15 +2,6 @@
 
 public class PagedList<T>
 {
-    private PagedList(List<T> items, int page, int pageSize, int totalCount)
-    {
-        Items = items;
-        Page = page;
-        PageSize = pageSize;
-        TotalCount = totalCount;
-    }
-
-    
     public List<T> Items { get; set; }
     public int Page { get; set; }
     public int PageSize { get; set; }
@@ -26,7 +17,13 @@ public class PagedList<T>
             items = query.Skip(((page) - 1) * pageSize).Take(pageSize).ToList();
         else items = query.ToList();
         
-        return new(items, page, pageSize, totalCount);
+        return new PagedList<T>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
     }
 
 }

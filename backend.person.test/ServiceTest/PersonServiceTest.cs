@@ -9,27 +9,67 @@ namespace backend.person.test.ServiceTest;
 
 public class PersonServiceTest
 {
-    private readonly PersonMocks _personMocks = new();
+    private readonly PersonMocks _mocks = new();
     private readonly IPersonService _personService;
 
     public PersonServiceTest()
     {
-        _personMocks.BuildMockPersonPersistSuccess();
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<PersonProfile>(); });
         var mapper = mapperConfig.CreateMapper();
-        _personService = new PersonService(_personMocks.PersonRepositoryMock.Object, mapper);
+        _personService = new PersonService(_mocks.PersonRepositoryMock.Object, mapper);
     }
 
     [Fact]
     private void PersistAsyncTest()
     {
         //Arrange
-
+        _mocks.CreatePersonPersistSuccessMock();
         //Act
-        var result = _personService.Persist(_personMocks.CreatePersonDto);
+        var result = _personService.Persist(_mocks.CreatePersonDto);
 
         //Assert
         result.Should().NotBeNull();
         result.Id.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
+    private void RemoveTest()
+    {
+        //Arrange
+        _mocks.CreateRemoveTestMocks();
+
+        //Act
+        var result = _personService.Remove(_mocks.Person.Id);
+
+        //Assert
+        result.Id.Should().Be(_mocks.Person.Id);
+    }
+
+    [Fact]
+    private void GetByPkTest()
+    {
+        //Arrange
+        _mocks.CreateGetByPkTestMocks();
+        _mocks.Person.Id = 25;
+
+        //Act
+        var result = _personService.GetByPk(_mocks.Person.Id);
+
+        //Assert
+        result.Id.Should().Be(_mocks.Person.Id);
+    }
+
+    [Fact]
+    private void GetListTest()
+    {
+        //Arrange
+        var person = _mocks.Person;
+        _mocks.CreateGetListMock();
+        //Act
+        var result = _personService.GetList($"{person.Id}", person.FirstName, person.LastName, person.Age, person.Age,
+            1, 10);
+
+        //Assert
+        result.Should().NotBeNull();
     }
 }

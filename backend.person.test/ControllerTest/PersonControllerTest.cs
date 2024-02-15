@@ -19,7 +19,7 @@ public class PersonControllerTest
     private void PersistSuccessTest()
     {
         //Arrange
-        _personMocks.BuildMockPersonPersistSuccess();
+        _personMocks.CreatePersonPersistSuccessMock();
 
         //Act
         var response = _personController.Persist(_personMocks.CreatePersonDto);
@@ -33,7 +33,7 @@ public class PersonControllerTest
     private void PersistExceptionTest()
     {
         //Arrange
-        _personMocks.BuildMockPersonPersistException();
+        _personMocks.CreatePersonPersistExceptionMock();
 
         //Act
         var response = _personController.Persist(_personMocks.CreatePersonDto);
