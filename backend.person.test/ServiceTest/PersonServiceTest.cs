@@ -20,7 +20,7 @@ public class PersonServiceTest
     }
 
     [Fact]
-    private void PersistAsyncTest()
+    private void PersistTest()
     {
         //Arrange
         _mocks.CreatePersonPersistSuccessMock();
