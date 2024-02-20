@@ -4,6 +4,8 @@ using backend.person.test.Mocks.PersonMocks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Serilog;
 
 namespace backend.person.test.ControllerTest;
 
@@ -14,7 +16,9 @@ public class PersonControllerTest
 
     public PersonControllerTest()
     {
-        _personController = new PersonController(_mocks.PersonServiceMock.Object);
+        _personController = new PersonController(
+            _mocks.PersonServiceMock.Object
+        );
     }
 
     [Fact]
@@ -60,8 +64,8 @@ public class PersonControllerTest
         result?.StatusCode.Should().Be(StatusCodes.Status200OK);
         value.Id.Should().Be(_mocks.Person.Id);
     }
-    
-    
+
+
     [Fact]
     private void GetList200Test()
     {
@@ -89,8 +93,6 @@ public class PersonControllerTest
         result.Should().NotBeNull();
         result?.StatusCode.Should().Be(StatusCodes.Status200OK);
         value.Id.Should().Be(_mocks.Person.Id);
-        
+
     }
-
-
 }
