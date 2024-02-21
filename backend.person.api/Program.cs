@@ -23,7 +23,7 @@ try
         loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
     
     var connectionString = builder.Configuration.GetConnectionString("PersonDataStringConnection");
-
+    
     // Add services to the container.
     builder.Services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
         opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
@@ -70,6 +70,7 @@ try
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();
+    
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
