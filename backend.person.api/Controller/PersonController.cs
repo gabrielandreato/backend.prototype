@@ -2,7 +2,9 @@
 using backend.person.datalibrary.Dto;
 using backend.person.modellibrary.DataModel;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace backend.person.api.Controller;
 
@@ -65,6 +67,7 @@ public class PersonController : ControllerBase
     {
         try
         {
+         
             return Ok(_personService.GetList(ids, firstName, lastName, startAge, endAge, page, pageSize));
         } catch (Exception e)
         {

@@ -6,64 +6,86 @@ using backend.person.datalibrary.Repository;
 using backend.person.datalibrary.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Templates;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var connectionString = builder.Configuration.GetConnectionString("PersonDataStringConnection");
-
-// Add services to the container.
-builder.Services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
-    opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-#region Repository
-
-builder.Services.AddTransient<IPersonRepository, PersonRepository>();
-
-#endregion
-
-#region Services
-
-builder.Services.AddTransient<IPersonService, PersonService>();
-
-#endregion
-
-builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+try
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    Log.Information("Starting web application");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+    
+    var connectionString = builder.Configuration.GetConnectionString("PersonDataStringConnection");
+    
+    // Add services to the container.
+    builder.Services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
+        opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+    );
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+    #region Repository
+
+    builder.Services.AddTransient<IPersonRepository, PersonRepository>();
+
+    #endregion
+
+    #region Services
+
+    builder.Services.AddTransient<IPersonService, PersonService>();
+
+    #endregion
+
+    builder.Services.AddControllers();
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(options =>
     {
-        Version = "v1",
-        Title = "Person API",
-        Description = "An ASP.NET Core Web API for managing Registration of People",
-        Contact = new OpenApiContact
+        options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Name = "Gabriel Andreato",
-            Url = new Uri("https://www.linkedin.com/in/gabriel-andreato-97bb8a165/")
-        },
+            Version = "v1",
+            Title = "Person API",
+            Description = "An ASP.NET Core Web API for managing Registration of People",
+            Contact = new OpenApiContact
+            {
+                Name = "Gabriel Andreato",
+                Url = new Uri("https://www.linkedin.com/in/gabriel-andreato-97bb8a165/")
+            },
+        });
+
+        // using System.Reflection;
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
 
-    // using System.Reflection;
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
 
+    var app = builder.Build();
 
-var app = builder.Build();
+    app.UseSerilogRequestLogging();
+    
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.MapControllers();
+
+    app.Run();
+
+} catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Fatal(ex, "Application terminated unexpectedly");
+} finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-
-app.MapControllers();
-
-app.Run();
