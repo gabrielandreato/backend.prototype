@@ -9,10 +9,6 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Templates;
 
-// Log.Logger = new LoggerConfiguration()
-//     .WriteTo.Console()
-//     .CreateBootstrapLogger();
-
 try
 {
     Log.Information("Starting web application");
