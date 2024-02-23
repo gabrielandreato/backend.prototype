@@ -13,73 +13,72 @@ try
 {
     Log.Information("Starting web application");
 
-    var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
-        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
-    
-    var connectionString = builder.Configuration.GetConnectionString("PersonDataStringConnection");
-    
-    // Add services to the container.
-    builder.Services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
-        opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-    );
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+
+var connectionString = builder.Configuration.GetConnectionString("PersonDataStringConnection");
+
+// Add services to the container.
+builder.Services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
+    opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
-    #region Repository
+#region Repository
 
-    builder.Services.AddTransient<IPersonRepository, PersonRepository>();
+builder.Services.AddTransient<IPersonRepository, PersonRepository>();
 
-    #endregion
+#endregion
 
-    #region Services
+#region Services
 
-    builder.Services.AddTransient<IPersonService, PersonService>();
+builder.Services.AddTransient<IPersonService, PersonService>();
 
-    #endregion
+#endregion
 
-    builder.Services.AddControllers();
+builder.Services.AddControllers();
 
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        options.SwaggerDoc("v1", new OpenApiInfo
+        Version = "v1",
+        Title = "Person API",
+        Description = "An ASP.NET Core Web API for managing Registration of People",
+        Contact = new OpenApiContact
         {
-            Version = "v1",
-            Title = "Person API",
-            Description = "An ASP.NET Core Web API for managing Registration of People",
-            Contact = new OpenApiContact
-            {
-                Name = "Gabriel Andreato",
-                Url = new Uri("https://www.linkedin.com/in/gabriel-andreato-97bb8a165/")
-            },
-        });
-
-        // using System.Reflection;
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            Name = "Gabriel Andreato",
+            Url = new Uri("https://www.linkedin.com/in/gabriel-andreato-97bb8a165/")
+        },
     });
 
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
-    var app = builder.Build();
 
-    app.UseSerilogRequestLogging();
-    
+var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+// app.UseSerilogRequestLogging();
 
-    app.UseHttpsRedirection();
 
-    app.MapControllers();
+// Configure the HTTP request pipeline.
 
-    app.Run();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
+
+app.Run();
 
 } catch (Exception ex)
 {
@@ -88,4 +87,3 @@ try
 {
     Log.CloseAndFlush();
 }
-
