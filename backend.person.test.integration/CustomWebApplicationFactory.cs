@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using backend.person.datalibrary.DataContext;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -28,17 +29,16 @@ public class CustomWebApplicationFactory<TProgram>
             // Create open SqliteConnection so EF won't automatically close it.
             services.AddSingleton<DbConnection>(container =>
             {
-                var connection = new MySqlConnection("DataSource=:memory:");
+                var connection = new SqliteConnection("DataSource=:memory:");
                 connection.Open();
-            
+
                 return connection;
             });
 
             services.AddDbContext<TestDataContext>((container, options) =>
             {
-                var connectionString = "";
                 var connection = container.GetRequiredService<DbConnection>();
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                options.UseSqlite(connection);
             });
         });
 
