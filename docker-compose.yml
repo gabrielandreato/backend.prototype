@@ -5,9 +5,4 @@ services:
     image: backend.person.api
     build: .
     ports:
-      - "8080-8081:8080"
-    deploy:
-      replicas: 2
-      mode: replicated
-      restart_policy: 
-        condition: on-failure
+      - "8081:8080"
