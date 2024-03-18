@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  es-01:
+    image: "docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2"
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    networks:
+      - backend.prototype
+    volumes:
+      - "es-data-es01:/usr/share/elasticsearch/data"
+        
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.10.2
+    depends_on:
+      - es-01
+    environment:
+      - 'ELASTICSEARCH_HOSTS=["http://es-01:9200"]'   
+    networks:
+      - backend.prototype
+    ports:
+      - "5601:5601"
+networks:
+  backend.prototype:
+    driver: bridge
+    
+volumes: 
+  es-data-es01:
