@@ -15,18 +15,17 @@ public class CustomWebApplicationFactory<TProgram>
         builder.ConfigureServices(services =>
         {
             var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbContextOptions<TestDataContext>));
+                d => d.ServiceType == typeof(DbContextOptions<PersonDataContext>));
 
             services.Remove(dbContextDescriptor);
 
             var dbConnectionDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbConnection));
+                d => d.ServiceType == typeof(DbConnection));
 
             services.Remove(dbConnectionDescriptor);
 
             // Create open SqliteConnection so EF won't automatically close it.
+            
             services.AddSingleton<DbConnection>(container =>
             {
                 var connection = new SqliteConnection("DataSource=:memory:");
@@ -35,11 +34,12 @@ public class CustomWebApplicationFactory<TProgram>
                 return connection;
             });
 
-            services.AddDbContext<TestDataContext>((container, options) =>
+            services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
             {
-                var connection = container.GetRequiredService<DbConnection>();
-                options.UseSqlite(connection);
-            });
+                opt.UseMySql("DataSource=:memory:" , ServerVersion.AutoDetect("DataSource=:memory:"));
+                opt.UseInMemoryDatabase(string.IsNullOrEmpty(null) ? "dbTestes" : null);
+            }
+            );
         });
 
         builder.UseEnvironment("Development");
