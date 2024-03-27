@@ -1,5 +1,6 @@
+using backend.person.datalibrary.Dto;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace backend.person.test.integration;
@@ -21,7 +22,7 @@ public class PersonTest: IClassFixture<CustomWebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("/Person/List")]
-    public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
+    public async Task GetListPerson(string url)
     {
         // Arrange
 
@@ -29,8 +30,28 @@ public class PersonTest: IClassFixture<CustomWebApplicationFactory<Program>>
         var response = await _client.GetAsync(url);
 
         // Assert
-        response.EnsureSuccessStatusCode(); // Status Code 200-299
-        Assert.Equal("application/json; charset=utf-8", 
-            response.Content.Headers.ContentType.ToString());
+        response.EnsureSuccessStatusCode();
+        Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+    }
+    
+    [Theory]
+    [InlineData("/Person/Persist")]
+    public async Task PostPerson(string url)
+    {
+        // Arrange
+        var person = new CreatePersonDto
+        {
+            FirstName = "Gabriel",
+            LastName = "Andreato",
+            Age = 27
+        };
+
+        var content = JsonContent.Create(person);
+        // Act
+        var response = await _client.PostAsync(url, content);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
     }
 }
