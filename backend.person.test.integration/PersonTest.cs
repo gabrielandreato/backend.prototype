@@ -1,42 +1,38 @@
 using backend.person.datalibrary.Dto;
+using backend.person.modellibrary.DataModel;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace backend.person.test.integration;
 
 public class PersonTest: IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly CustomWebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
     
-
     public PersonTest(CustomWebApplicationFactory<Program> factory)
     {
-        _factory = factory;
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });
     }
 
-    [Theory]
-    [InlineData("/Person/List")]
-    public async Task GetListPerson(string url)
+    [Fact]
+    public async Task GetListPerson()
     {
         // Arrange
 
         // Act
-        var response = await _client.GetAsync(url);
+        var response = await _client.GetAsync("/Person/List");
 
         // Assert
         response.EnsureSuccessStatusCode();
-        Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+        response.Content.Headers.ContentType?.ToString().Should().Be("application/json; charset=utf-8");
     }
     
-    [Theory]
-    [InlineData("/Person/Persist")]
-    public async Task PostPerson(string url)
+    [Fact]
+    public async Task PostPerson()
     {
         // Arrange
         var person = new CreatePersonDto
@@ -48,10 +44,13 @@ public class PersonTest: IClassFixture<CustomWebApplicationFactory<Program>>
 
         var content = JsonContent.Create(person);
         // Act
-        var response = await _client.PostAsync(url, content);
+        var response = await _client.PostAsync("/Person/Persist", content);
 
         // Assert
         response.EnsureSuccessStatusCode();
-        Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+        response.Content.Headers.ContentType?.ToString().Should().Be("application/json; charset=utf-8");
+        
+        var result = await response.Content.ReadFromJsonAsync<Person>();
+        result?.Id.Should().NotBe(0);
     }
 }
