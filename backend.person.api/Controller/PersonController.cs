@@ -1,6 +1,7 @@
 ﻿using backend.person.api.Services.Interfaces;
 using backend.person.datalibrary.Dto;
 using backend.person.modellibrary.DataModel;
+using backend.person.modellibrary.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -18,20 +19,18 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Insert or Update a person, you cannot insert a person with the same name.
+    ///     Insert or Update a person, you cannot insert a person with the same name.
     /// </summary>
     /// <param name="person">Person to be Persisted</param>
     /// <returns>Persisted person</returns>
-    /// /// /// <remarks>
-    /// Sample request:
-    ///
+    /// <remarks>
+    ///     Sample request:
     ///     POST /Person/Persist
     ///     {
-    ///        "firstName": "Gabriel",
-    ///        "lastName": "Andreato",
-    ///        "age": 27
+    ///     "firstName": "Gabriel",
+    ///     "lastName": "Andreato",
+    ///     "age": 27
     ///     }
-    ///
     /// </remarks>
     [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
@@ -48,7 +47,7 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Get a list of Person
+    ///     Get a list of Person
     /// </summary>
     /// <param name="ids">Unique identifier</param>
     /// <param name="firstName">First name for the person</param>
@@ -57,14 +56,16 @@ public class PersonController : ControllerBase
     /// <param name="endAge">The last age in the range</param>
     /// <param name="page">The page to retrieve</param>
     /// <param name="pageSize">The number of objects to return</param>
-    [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(List<Person>))]
+    [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(PagedList<Person>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpGet("List")]
-    public IActionResult GetList([FromQuery] string? ids = null, string? firstName = null, string? lastName = null, int startAge = 0,
+    public IActionResult GetList([FromQuery] string? ids = null, string? firstName = null, string? lastName = null,
+        int startAge = 0,
         int endAge = 0, int page = 0, int pageSize = 0)
     {
         try
         {
+
             return Ok(_personService.GetList(ids, firstName, lastName, startAge, endAge, page, pageSize));
         } catch (Exception e)
         {
@@ -73,13 +74,13 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Get a person based in the unique identifier.
+    ///     Get a person based in the unique identifier.
     /// </summary>
     /// <param name="id">Unique identifier.</param>
     [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Error to prosses the request.")]
     [HttpGet("{id}")]
-    public IActionResult GetByPk([FromRoute]int id)
+    public IActionResult GetByPk([FromRoute] int id)
     {
         try
         {
@@ -91,10 +92,9 @@ public class PersonController : ControllerBase
         }
     }
 
-    
-    
+
     /// <summary>
-    /// Remove a person based in the unique identifier.
+    ///     Remove a person based in the unique identifier.
     /// </summary>
     /// <param name="id">Unique identifier.</param>
     [SwaggerResponse(StatusCodes.Status200OK, "Success to prosses the request.", typeof(Person))]

@@ -6,8 +6,16 @@ using backend.person.datalibrary.Repository;
 using backend.person.datalibrary.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
+
+try
+{
+    Log.Information("Starting web application");
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 var connectionString = builder.Configuration.GetConnectionString("PersonDataStringConnection");
 
@@ -16,6 +24,7 @@ builder.Services.AddDbContext<IPersonDataContext, PersonDataContext>(opt =>
     opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 #region Repository
 
@@ -55,15 +64,29 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// app.UseSerilogRequestLogging();
+
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
 app.MapControllers();
 
 app.Run();
+
+} catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+} finally
+{
+    Log.CloseAndFlush();
+}
+namespace backend.person.api
+{
+    public partial class Program { }
+}

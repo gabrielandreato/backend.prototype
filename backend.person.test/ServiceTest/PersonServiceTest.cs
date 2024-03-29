@@ -20,7 +20,7 @@ public class PersonServiceTest
     }
 
     [Fact]
-    private void PersistTest()
+    private void Persist()
     {
         //Arrange
         _mocks.CreatePersonPersistSuccessMock();
@@ -33,7 +33,7 @@ public class PersonServiceTest
     }
 
     [Fact]
-    private void RemoveTest()
+    private void Remove()
     {
         //Arrange
         _mocks.CreateRemoveTestMocks();
@@ -46,7 +46,7 @@ public class PersonServiceTest
     }
 
     [Fact]
-    private void GetByPkTest()
+    private void GetByPk()
     {
         //Arrange
         _mocks.CreateGetByPkTestMocks();
@@ -60,7 +60,7 @@ public class PersonServiceTest
     }
 
     [Fact]
-    private void GetListTest()
+    private void GetList()
     {
         //Arrange
         var person = _mocks.Person;
