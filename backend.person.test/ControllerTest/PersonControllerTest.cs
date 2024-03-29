@@ -22,7 +22,7 @@ public class PersonControllerTest
     }
 
     [Fact]
-    private void Persist200Test()
+    private void Persist200()
     {
         //Arrange
         _mocks.CreatePersonPersistSuccessMock();
@@ -36,7 +36,7 @@ public class PersonControllerTest
     }
 
     [Fact]
-    private void Persist400Test()
+    private void Persist400()
     {
         //Arrange
         _mocks.CreatePersonPersistExceptionMock();
@@ -51,7 +51,7 @@ public class PersonControllerTest
     }
 
     [Fact]
-    private void GetByPk200Test()
+    private void GetByPk200()
     {
         //Arrange
         _mocks.CreateGetByPkTestMocks();
@@ -67,7 +67,7 @@ public class PersonControllerTest
 
 
     [Fact]
-    private void GetList200Test()
+    private void GetList200()
     {
         //Arrange
         _mocks.CreateGetListMock();
@@ -80,7 +80,7 @@ public class PersonControllerTest
     }
 
     [Fact]
-    private void Remove200Test()
+    private void Remove200()
     {
         //Arrange
         _mocks.CreateRemoveTestMocks();

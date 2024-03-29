@@ -23,7 +23,7 @@ public class PersonRepositoryTest
     }
 
     [Fact]
-    private void PersistInsertTest()
+    private void PersistInsert()
     {
         //Arrange
 
@@ -41,7 +41,7 @@ public class PersonRepositoryTest
     }
 
     [Fact]
-    private void PersistUpdateTest()
+    private void PersistUpdate()
     {
         //Arrange
         var person = Person.Create("Carlos", "Albuquerque", 30);
@@ -57,7 +57,7 @@ public class PersonRepositoryTest
     }
 
     [Fact]
-    private void GetListTest()
+    private void GetList()
     {
         //Arrange
         var person = _personMocks.Person;
@@ -72,7 +72,7 @@ public class PersonRepositoryTest
     }
 
     [Fact]
-    private void RemoveExistentTest()
+    private void RemoveExistent()
     {
         //Arrange
 
@@ -85,7 +85,7 @@ public class PersonRepositoryTest
     }
 
     [Fact]
-    private void RemoveInexistentTest()
+    private void RemoveInexistent()
     {
         //Arrange
 
@@ -105,7 +105,7 @@ public class PersonRepositoryTest
     }
 
     [Fact]
-    private void GetByPkTest()
+    private void GetByPk()
     {
         //Arrange
 

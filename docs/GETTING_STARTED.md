@@ -32,3 +32,7 @@ nucket packages.
 Start the respective backend.[domainName].api project using Visual Studio.
 
 This solution contains projects capable to run with Docker.
+
+---
+
+[Return to Readme](..%2F..%2FREADME.md)

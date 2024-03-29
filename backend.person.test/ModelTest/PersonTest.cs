@@ -25,7 +25,7 @@ public class PersonTest
     }
     
     [Fact]
-    private void CreateTest()
+    private void Create()
     {
         //Arrange
         //Act
@@ -36,7 +36,7 @@ public class PersonTest
     }
 
     [Fact]
-    private void SerializeTest()
+    private void Serialize()
     {
         //Arrange
         //Act
@@ -47,7 +47,7 @@ public class PersonTest
     }
     
     [Fact]
-    private void DeserializeTest()
+    private void Deserialize()
     {
         //Arrange
         //Act
@@ -59,7 +59,7 @@ public class PersonTest
     }
 
     [Fact]
-    private void MapToCreateDtoTest()
+    private void MapToCreateDto()
     {
         //Arrange
         var createPersonDto = new CreatePersonDto

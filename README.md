@@ -2,15 +2,6 @@
 
 ---
 
-### Table of contents
-
----
-
-* [Quickstart](#quickstart- )
-* [Contribution guidelines](#contribution-guidelines- )
-* [Version notes](#version-notes-)
-
-
 ### Quickstart
 
 ---
