@@ -40,3 +40,7 @@ To bug fixs. Consider include in the version note:
 
 * Bug evidences;
 * Implemented fixement description;
+
+---
+
+[Return to Readme](..%2F..%2FREADME.md)

@@ -1,4 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+EXPOSE 80/tcp
+
 WORKDIR /app
 COPY /backend.person.api/*.csproj ./
 RUN dotnet restore

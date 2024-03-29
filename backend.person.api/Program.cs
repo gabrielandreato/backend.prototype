@@ -7,7 +7,6 @@ using backend.person.datalibrary.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Templates;
 
 try
 {
@@ -86,4 +85,8 @@ app.Run();
 } finally
 {
     Log.CloseAndFlush();
+}
+namespace backend.person.api
+{
+    public partial class Program { }
 }
